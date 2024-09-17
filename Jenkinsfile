@@ -1,29 +1,28 @@
 @Library('pipeline_shared_library') _
 
-pipeline { 
+pipeline {
     agent any
 
-    parameters{
-        
+    parameters {
         choice(name: 'action', choices: 'create\ndelete', description: 'Choose create/Destroy')
     }
 
     stages {
         stage('Git checkout') {
-        when { expression {params.action == 'create'}}
+            when { expression { params.action == 'create' } }
             steps {
                 script {
                     gitCheckout(
-                        branch: "main",
-                        url: "https://github.com/murugan2114/FullStack-Blogging-App.git",
-                        credentialsId: "git-creds"
+                        branch: 'main',
+                        url: 'https://github.com/murugan2114/FullStack-Blogging-App.git',
+                        credentialsId: 'git-creds'
                     )
                 }
             }
         }
 
         stage('Code Compile') {
-        when { expression {params.action == 'create'}}
+            when { expression { params.action == 'create' } }
             steps {
                 script {
                     codeCompile()
@@ -32,7 +31,7 @@ pipeline {
         }
 
         stage('Run Unit Test') {
-        when { expression {params.action == 'create'}}
+            when { expression { params.action == 'create' } }
             steps {
                 script {
                     mvnTest()
@@ -41,7 +40,7 @@ pipeline {
         }
 
         stage('Run Integration Test') {
-            when { expression {params.action == 'create'}}
+            when { expression { params.action == 'create' } }
             steps {
                 script {
                     mvnIntegrationTest()
@@ -50,7 +49,7 @@ pipeline {
         }
 
         stage('Static Code Analysis') {
-            when { expression {params.action == 'create'}}
+            when { expression { params.action == 'create' } }
             steps {
                 script {
                     def sonarQubecredentialsId = 'sonarqube-api'
@@ -58,8 +57,15 @@ pipeline {
                 }
             }
         }
+
+        stage('Quality Gate Status') {
+            when { expression { params.action == 'create' } }
+            steps {
+                script {
+                    def sonarQubecredentialsId = 'sonarqube-api'
+                    qualityGateStatus(sonarQubecredentialsId)
+                }
+            }
+        }
     }
 }
-
-
-
