@@ -31,6 +31,14 @@ pipeline {
                 }
             }
         }
+
+        stage('Run Integration Test') {
+            steps {
+                script {
+                    mvnIntegrationTest()
+                }
+            }
+        }
     }
 }
 
