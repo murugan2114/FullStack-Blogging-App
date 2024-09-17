@@ -52,8 +52,10 @@ pipeline {
             when { expression { params.action == 'create' } }
             steps {
                 script {
-                    def sonarQubeCredentialsId = 'sonarqube-api'
-                    staticCodeAnalysis(sonarQubeCredentialsId) // Shared library function for SonarQube
+                    withSonarQubeEnv('sonar-server') {
+                        def sonarQubeCredentialsId = 'sonarqube-api'
+                        staticCodeAnalysis(sonarQubeCredentialsId)
+                    }
                 }
             }
         }
