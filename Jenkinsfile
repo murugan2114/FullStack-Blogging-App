@@ -25,7 +25,7 @@ pipeline {
             when { expression { params.action == 'create' } }
             steps {
                 script {
-                    codeCompile()
+                    codeCompile() // Assuming this is a custom function in your shared library
                 }
             }
         }
@@ -34,7 +34,7 @@ pipeline {
             when { expression { params.action == 'create' } }
             steps {
                 script {
-                    mvnTest()
+                    mvnTest() // Assuming this runs Maven tests defined in the shared library
                 }
             }
         }
@@ -43,7 +43,7 @@ pipeline {
             when { expression { params.action == 'create' } }
             steps {
                 script {
-                    mvnIntegrationTest()
+                    mvnIntegrationTest() // Assuming this runs Maven integration tests defined in the shared library
                 }
             }
         }
@@ -52,8 +52,8 @@ pipeline {
             when { expression { params.action == 'create' } }
             steps {
                 script {
-                    def sonarQubecredentialsId = 'sonarqube-api'
-                    staticCodeAnalysis(sonarQubecredentialsId)
+                    def sonarQubeCredentialsId = 'sonarqube-api'
+                    staticCodeAnalysis(sonarQubeCredentialsId) // Shared library function for SonarQube
                 }
             }
         }
@@ -62,8 +62,8 @@ pipeline {
             when { expression { params.action == 'create' } }
             steps {
                 script {
-                    def sonarQubecredentialsId = 'sonarqube-api'
-                    qualityGateStatus(sonarQubecredentialsId)
+                    def sonarQubeCredentialsId = 'sonarqube-api'
+                    qualityGateStatus(sonarQubeCredentialsId) // Check SonarQube Quality Gate status
                 }
             }
         }
