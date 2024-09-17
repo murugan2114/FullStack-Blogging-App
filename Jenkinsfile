@@ -16,7 +16,7 @@ pipeline {
             }
         }
 
-        stage('Git checkout') {
+        stage('Code Compile') {
             steps {
                 script {
                     codeCompile()
