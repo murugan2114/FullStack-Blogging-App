@@ -15,6 +15,14 @@ pipeline {
                 }
             }
         }
+
+        stage('Git checkout') {
+            steps {
+                script {
+                    codeCompile()
+                }
+            }
+        }
     }
 }
 
