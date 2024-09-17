@@ -1,29 +1,13 @@
 pipeline { 
     agent any
-    
-    tools {
-        maven 'maven3'
-        jdk 'jdk17'
-    }
 
     stages {
         
-        stage('Compile') {
+        stage('Git checkout') {
             steps {
-            sh  "mvn compile"
+            sh  "git branch: 'main', credentialsId: 'git-creds', url: 'https://github.com/murugan2114/FullStack-Blogging-App.git'"
             }
         }
         
-        stage('Test') {
-            steps {
-                sh "mvn test"
-            }
-        }
-        
-        stage('Package') {
-            steps {
-                sh "mvn package"
-            }
-        }
     }
 }
