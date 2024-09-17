@@ -6,7 +6,7 @@ pipeline {
         stage('Git checkout') {
             steps {
               script{
-                sh  "git branch: 'main', credentialsId: 'git-creds', url: 'https://github.com/murugan2114/FullStack-Blogging-App.git"
+                git branch: 'main', credentialsId: 'git-creds', url: 'https://github.com/murugan2114/FullStack-Blogging-App.git
               }
             
             }
