@@ -23,6 +23,14 @@ pipeline {
                 }
             }
         }
+
+        stage('Run Unit Test') {
+            steps {
+                script {
+                    mvnTest()
+                }
+            }
+        }
     }
 }
 
