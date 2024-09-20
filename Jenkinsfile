@@ -8,7 +8,7 @@ pipeline {
         string(name: 'aws_account_id', description: 'AWS Account ID', defaultValue: '009160043436')
         string(name: 'Region', description: 'Region of ECR', defaultValue: 'us-east-1')
         string(name: 'ECR_REPO_NAME', description: 'Name of the ECR', defaultValue: 'fullstack-app')
-        string(name: 'cluster', description: 'Name of the EKS Cluster', defaultValue: 'demo-cluster1')
+        string(name: 'cluster', description: 'Name of the EKS Cluster', defaultValue: 'demo-cluster')
     }
 
     environment {
@@ -111,6 +111,22 @@ pipeline {
             steps {
                 script {
                     dockerImagePush("${params.aws_account_id}", "${params.Region}", "${params.ECR_REPO_NAME}")
+                }
+            }
+        }
+
+        stage('Create EKS Cluster : Terraform') {
+            when { expression {  params.action == 'create' } }
+            steps {
+                script {
+                    dir('eks_module') {
+                        sh """
+
+                          terraform init
+                          terraform plan -var 'access_key=$ACCESS_KEY' -var 'secret_key=$SECRET_KEY' -var 'region=${params.Region}' --var-file=./config/terraform.tfvars
+                          terraform destroy -var 'access_key=$ACCESS_KEY' -var 'secret_key=$SECRET_KEY' -var 'region=${params.Region}' --var-file=./config/terraform.tfvars --auto-approve
+                      """
+                    }
                 }
             }
         }
