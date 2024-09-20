@@ -82,5 +82,14 @@ pipeline {
                 }
             }
         }
+
+        stage('Docker Image Build : ECR') {
+            when { expression {  params.action == 'create' } }
+            steps {
+                script {
+                    dockerBuild("${params.aws_account_id}", "${params.Region}", "${params.ECR_REPO_NAME}")
+                }
+            }
+        }
     }
 }
